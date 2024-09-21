@@ -575,6 +575,10 @@ proc assignObj(info: NodeInfo): NimNode =
       else: immediateParent
     bodyif.add quote do:
       var `resvar`: `parentSym`
+  elif targetSym.kind == nnkPostfix:
+    let target = targetSym[1]
+    bodyif.add quote do:
+      var `resvar`: `target`
   else:
     bodyif.add quote do:
       var `resvar`: `targetSym`

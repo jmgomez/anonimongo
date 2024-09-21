@@ -303,12 +303,12 @@ proc newMongo*[S: Multisock](muri: MongoUri, poolconn = poolconn, dnsserver = "8
   template raiseInvalidSep: untyped =
     raise newException(MongoError,
       &"Whether invalid URI {uri} or missing trailing '/'")
-    
+  
+  type URLUri = Uri
   let uri = muri.string
   if uri.count('/') < 3:
     raiseInvalidSep()
   let uriobj = parseUri uri
-  type URLUri = Uri
   var uris: seq[URLUri]
   if uriobj.scheme == "":
     raise newException(MongoError, &"No scheme protocol provided at \"{uri}\" uri")
@@ -328,7 +328,7 @@ proc newMongo*[S: Multisock](muri: MongoUri, poolconn = poolconn, dnsserver = "8
         raise newException(MongoError, errmsg)
       for i, ans in resp.answers:
         let srvrec = ans as SRVRecord
-        uris[i] = Uri(
+        uris[i] = URLUri(
           scheme: "mongodb",
           hostname: srvrec.target,
           port: $srvrec.port,
@@ -367,7 +367,7 @@ proc newMongo*[S: Multisock](muri: MongoUri, poolconn = poolconn, dnsserver = "8
     if hdom.len > 1:
       port = hdom[1]
     hostname = hdom[0]
-    uris[i] = Uri(
+    uris[i] = URLUri(
       scheme: scheme,
       hostname: hostname,
       port: port,
