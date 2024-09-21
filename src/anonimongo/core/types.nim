@@ -303,7 +303,6 @@ proc newMongo*[S: Multisock](muri: MongoUri, poolconn = poolconn, dnsserver = "8
   template raiseInvalidSep: untyped =
     raise newException(MongoError,
       &"Whether invalid URI {uri} or missing trailing '/'")
-  
   type URLUri = Uri
   let uri = muri.string
   if uri.count('/') < 3:
