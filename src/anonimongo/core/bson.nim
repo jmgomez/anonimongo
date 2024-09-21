@@ -1015,7 +1015,6 @@ proc newBson*(first: (string, BsonBase), table: varargs[(string, BsonBase)]): Bs
   var tableres = newOrderedTable[string, BsonBase]()
   ## Overload newBson with table definition only and stream default to
   ## StringStream. In most case, use `bson macro<#bson.m,untyped>`_.
-  
   for t in @[first] & table.toSeq:
     tableres[t[0]] = t[1]
   BsonDocument(
